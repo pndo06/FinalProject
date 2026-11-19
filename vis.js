@@ -205,10 +205,6 @@ try {
   y.domain([minTemp - padding, maxTemp + padding]).nice();
   selectedYear = years[1];
   d3.select('#inspect-year').attr('min', years[0]).attr('max', years[1]).property('disabled', false);
-  const endpoints = data.filter(d => d.year === years[1]);
-  const low = endpoints.find(d => d.scenario === 'SSP1-2.6');
-  const high = endpoints.find(d => d.scenario === 'SSP5-8.5');
-  if (low && high) d3.select('#takeaway').text(`In the supplied table, the high-emissions value is ${(high.global_temp_c - low.global_temp_c).toFixed(2)} °C above the low-emissions value in ${years[1]}. This is a difference between scenarios, not warming relative to a historical baseline.`);
   resizeChart();
   new ResizeObserver(resizeChart).observe(document.querySelector('#chart'));
 } catch {

@@ -51,6 +51,14 @@
                     </button>
                 </div>
                 
+                <label for="temperature-location">Temperature location:</label>
+                <select id="temperature-location" aria-describedby="location-note">
+                    <option value="global" selected>Global Average</option>
+                    <option value="shanghai" disabled>Shanghai — temperature data unavailable</option>
+                    <option value="los-angeles" disabled>Los Angeles — temperature data unavailable</option>
+                    <option value="reykjavik" disabled>Reykjavík — temperature data unavailable</option>
+                </select>
+                <p id="location-note" class="source-note">Only the existing global temperature series is available in this prototype. Comparable city-level SSP temperature projections have not been verified, so city options are disabled. The PM2.5 measurements above are air-quality data, not city temperature projections.</p>
                 <p id="chart-status" role="status">Loading temperature data…</p>
                 <div id="chart"></div>
                 <div class="year-inspection">
@@ -69,7 +77,7 @@
             <section aria-labelledby="prototype-heading">
                 <h2 id="prototype-heading">Initial prototype write-up</h2>
                 <h3 id="progress-heading">What have we done so far?</h3>
-                <p>We have built an interactive prototype comparing local air quality with separate global temperature trajectories. A D3 bar chart shows IQAir’s reported 2023 annual PM2.5 averages for Shanghai, Los Angeles, and Reykjavík, with units, source links, and monitoring caveats. Selecting a city highlights its bar and updates its reported value while keeping all three cities visible. The existing D3 line chart uses 258 global scenario records from 2015 through 2100 and retains scenario toggles and year inspection. Users can hover or tap the global chart, or use the keyboard-accessible year slider, to compare yearly values on a fixed vertical scale. We have also added readable selection states and messages for empty selections or unavailable data.</p>
+                <p>We have built an interactive prototype comparing local air quality with separate global temperature trajectories. A D3 bar chart shows IQAir’s reported 2023 annual PM2.5 averages for Shanghai, Los Angeles, and Reykjavík, with units, source links, and monitoring caveats. Selecting a city highlights its bar and updates its reported value while keeping all three cities visible. The existing D3 line chart uses 258 global scenario records from 2015 through 2100 and retains scenario toggles and year inspection. Users can hover or tap the global chart, or use the keyboard-accessible year slider, to compare yearly values on a fixed vertical scale. The temperature location selector shows Global Average, with city options disabled until comparable city-level SSP data is verified. We have also added readable selection states and messages for empty selections or unavailable data.</p>
             </section>
             <section aria-labelledby="challenges-heading">
                 <h3 id="challenges-heading">What will be most challenging to design, and why?</h3>

@@ -17,3 +17,33 @@ for scenario in ['SSP1-2.6', 'SSP2-4.5', 'SSP5-8.5']:
     assert sorted(years) == list(range(2015, 2101))
 assert len({(row['scenario'], row['year']) for row in global_rows}) == 258
 print('PASS: cited city values/year/source and complete global scenario years.')
+
+# The prototype must never label global temperatures as city projections.
+import re
+from html.parser import HTMLParser
+
+class LocationOptions(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.in_location = False
+        self.options = []
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == 'select':
+            self.in_location = attrs.get('id') == 'temperature-location'
+        if tag == 'option' and self.in_location:
+            self.options.append(attrs)
+    def handle_endtag(self, tag):
+        if tag == 'select':
+            self.in_location = False
+
+html = (root / 'index.html').read_text()
+parser = LocationOptions()
+parser.feed(html)
+assert [option['value'] for option in parser.options] == ['global', 'shanghai', 'los-angeles', 'reykjavik']
+assert 'selected' in parser.options[0] and 'disabled' not in parser.options[0]
+assert all('disabled' in option for option in parser.options[1:])
+for heading in ['progress-heading', 'challenges-heading']:
+    paragraph = re.search(r'id="' + heading + r'"[^>]*>.*?</h3>\s*<p>(.*?)</p>', html, re.S).group(1)
+    assert len(re.findall(r'[.!?](?:\s|$)', paragraph)) >= 4
+print('PASS: honest location options and both four-sentence prototype answers.')

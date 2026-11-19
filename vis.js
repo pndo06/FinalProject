@@ -95,7 +95,7 @@ const infoText = infoBox.append("text")
 function updateChart() {
   const visible = data.filter(d => active.has(d.scenario));
 
-  d3.select('#chart-status').text(visible.length ? 'Choose scenarios to compare. The axes use the same scale for every selection.' : 'Select at least one emissions scenario.');
+  d3.select('#chart-status').text(visible.length ? '' : 'Select at least one emissions scenario.');
   hoverLine.style('display', 'none');
   infoBox.style('display', 'none');
   xAxis.call(d3.axisBottom(x).tickFormat(d3.format("d")).ticks(width < 500 ? 4 : 10));

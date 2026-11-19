@@ -39,7 +39,7 @@ try {
       .attr('dy', '.35em').text(d => d.pm25.toFixed(1));
     svg.selectAll('text').style('font-size', '13px');
     const city = cities.find(d => d.city === selected);
-    d3.select('#city-detail').text(`${city.city}, ${city.country}: ${city.pm25.toFixed(1)} µg/m³ reported annual PM2.5 in ${city.year}. This is a city-level annual average from IQAir, not a neighborhood reading or a temperature forecast.`);
+    d3.select('#city-detail').text(`${city.city}: ${city.pm25.toFixed(1)} µg/m³ (${city.year})`);
   }
   selector.property('disabled', false).on('change', event => { selected = event.target.value; render(); });
   d3.select('#city-status').text('All three cities remain visible. Select a city to highlight its reported annual average.');

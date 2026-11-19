@@ -6,8 +6,8 @@
         <title>Final Project Interactive Visualization</title>
         
         <link rel="stylesheet" href="style.css?v=cities1">
-        <script type="module" src="vis.js?v=cities1"></script>
-        <script type="module" src="cities.js?v=cities1"></script>
+        <script type="module" src="vis.js?v=copy2"></script>
+        <script type="module" src="cities.js?v=copy2"></script>
     </head>
     
     <body>
@@ -30,10 +30,7 @@
                 <p id="city-status" role="status">Loading city air-quality data…</p>
                 <div id="city-chart"></div>
                 <p id="city-detail" aria-live="polite"></p>
-                <p class="source-note">Source: IQAir’s 2023 World Air Quality Report and historical city tables: <a href="https://www.iqair.com/world-most-polluted-cities?cities=R6kPWmwE4Nts3vq3k">Shanghai</a>, <a href="https://www.iqair.com/world-most-polluted-cities?cities=xwJyTC4tyag4svdTe">Los Angeles</a>, and <a href="https://www.iqair.com/world-most-polluted-cities?page=183">Reykjavík</a> (2023 column; accessed November 18, 2026). <a href="city_pm25.csv">Download the three records</a>.</p>
-                <p class="source-note">These are reported city annual averages, not live AQI readings or personal exposure measurements. Monitoring coverage, instruments, and station locations differ; IQAir includes regulatory monitors and low-cost sensors. Annual averages hide daily peaks and neighborhood differences. The cities illustrate different conditions, not established worldwide pollution ranks. <a href="https://www.iqair.com/dl/2023_World_Air_Quality_Report.pdf">Report and methodology</a>.</p>
             </section>
-            <p class="transition-note">City air quality describes local pollution exposure over a particular year. The SSP chart below describes global climate trajectories over decades; neither chart can be converted into the other, and the global lines are not forecasts for these cities.</p>
             <section class="controls">
                 <h2>Global temperature: three emissions scenarios</h2>
                 <p>Compare the trajectories, then inspect a year. The vertical scale stays fixed when you hide scenarios.</p>
@@ -52,13 +49,12 @@
                 </div>
                 
                 <label for="temperature-location">Temperature location:</label>
-                <select id="temperature-location" aria-describedby="location-note">
+                <select id="temperature-location">
                     <option value="global" selected>Global Average</option>
                     <option value="shanghai" disabled>Shanghai — temperature data unavailable</option>
                     <option value="los-angeles" disabled>Los Angeles — temperature data unavailable</option>
                     <option value="reykjavik" disabled>Reykjavík — temperature data unavailable</option>
                 </select>
-                <p id="location-note" class="source-note">Only the existing global temperature series is available in this prototype. Comparable city-level SSP temperature projections have not been verified, so city options are disabled. The PM2.5 measurements above are air-quality data, not city temperature projections.</p>
                 <p id="chart-status" role="status">Loading temperature data…</p>
                 <div id="chart"></div>
                 <div class="year-inspection">
@@ -69,15 +65,10 @@
                 </div>
                 <p id="takeaway"></p>
             </section>
-            <section aria-labelledby="data-heading">
-                <h2 id="data-heading">About the data</h2>
-                <p>This prototype reads <a href="all_scenarios.csv">all_scenarios.csv</a>, which contains 258 annual records: 86 years per scenario, from 2015 through 2100. The chart uses the file’s <code>global_temp_c</code> values as supplied.</p>
-                <p><strong>Source verification pending:</strong> The original provider, climate model or ensemble, processing method, and temperature baseline are not documented in the current repository. These details must be verified before interpreting the values as absolute temperatures or warming relative to a historical baseline. The three lines show the supplied trajectories; uncertainty ranges are not available in this CSV.</p>
-            </section>
             <section aria-labelledby="prototype-heading">
                 <h2 id="prototype-heading">Initial prototype write-up</h2>
                 <h3 id="progress-heading">What have we done so far?</h3>
-                <p>We have built an interactive prototype comparing local air quality with separate global temperature trajectories. A D3 bar chart shows IQAir’s reported 2023 annual PM2.5 averages for Shanghai, Los Angeles, and Reykjavík, with units, source links, and monitoring caveats. Selecting a city highlights its bar and updates its reported value while keeping all three cities visible. The existing D3 line chart uses 258 global scenario records from 2015 through 2100 and retains scenario toggles and year inspection. Users can hover or tap the global chart, or use the keyboard-accessible year slider, to compare yearly values on a fixed vertical scale. The temperature location selector shows Global Average, with city options disabled until comparable city-level SSP data is verified. We have also added readable selection states and messages for empty selections or unavailable data.</p>
+                <p>We have built an interactive prototype comparing local air quality with separate global temperature trajectories. A D3 bar chart shows IQAir’s reported 2023 annual PM2.5 averages for Shanghai, Los Angeles, and Reykjavík, using the same year and units for all three cities. Selecting a city highlights its bar and updates its reported value while keeping all three cities visible. The existing D3 line chart uses 258 global scenario records from 2015 through 2100 and retains scenario toggles and year inspection. Users can hover or tap the global chart, or use the keyboard-accessible year slider, to compare yearly values on a fixed vertical scale. The temperature location selector shows Global Average, with city options disabled until comparable city-level SSP data is verified. We have also added readable selection states and messages for empty selections or unavailable data.</p>
             </section>
             <section aria-labelledby="challenges-heading">
                 <h3 id="challenges-heading">What will be most challenging to design, and why?</h3>

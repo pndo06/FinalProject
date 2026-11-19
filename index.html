@@ -5,34 +5,79 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Final Project Interactive Visualization</title>
         
-        <link rel="stylesheet" href="style.css">
-        <script type="module" src="vis.js"></script>
+        <link rel="stylesheet" href="style.css?v=cities1">
+        <script type="module" src="vis.js?v=cities1"></script>
+        <script type="module" src="cities.js?v=cities1"></script>
     </head>
     
     <body>
         <header>
             <h1>How Hot Could Earth Get by 2100?</h1>
-            <p>Comparing global temperature projections under three emissions scenarios</p>
+            <p>Local air quality in three cities, alongside global temperature scenarios</p>
         </header>
         
         <main>
+            <p class="introduction">How do air-quality conditions in Shanghai, Los Angeles, and Reykjavík compare—and how is that different from global warming? Start with a measured local pollutant, then explore the separate global temperature trajectories below.</p>
+            <section aria-labelledby="cities-heading">
+                <h2 id="cities-heading">Three cities: annual PM2.5 in 2023</h2>
+                <p>PM2.5 measures fine-particle air pollution in micrograms per cubic meter (µg/m³). It is not a direct measure of greenhouse-gas emissions and does not predict a city’s future temperature.</p>
+                <label for="city-select">Highlight a city:</label>
+                <select id="city-select" disabled>
+                    <option value="Shanghai">Shanghai, China</option>
+                    <option value="Los Angeles">Los Angeles, USA</option>
+                    <option value="Reykjavík">Reykjavík, Iceland</option>
+                </select>
+                <p id="city-status" role="status">Loading city air-quality data…</p>
+                <div id="city-chart"></div>
+                <p id="city-detail" aria-live="polite"></p>
+                <p class="source-note">Source: IQAir’s 2023 World Air Quality Report and historical city tables: <a href="https://www.iqair.com/world-most-polluted-cities?cities=R6kPWmwE4Nts3vq3k">Shanghai</a>, <a href="https://www.iqair.com/world-most-polluted-cities?cities=xwJyTC4tyag4svdTe">Los Angeles</a>, and <a href="https://www.iqair.com/world-most-polluted-cities?page=183">Reykjavík</a> (2023 column; accessed November 18, 2026). <a href="city_pm25.csv">Download the three records</a>.</p>
+                <p class="source-note">These are reported city annual averages, not live AQI readings or personal exposure measurements. Monitoring coverage, instruments, and station locations differ; IQAir includes regulatory monitors and low-cost sensors. Annual averages hide daily peaks and neighborhood differences. The cities illustrate different conditions, not established worldwide pollution ranks. <a href="https://www.iqair.com/dl/2023_World_Air_Quality_Report.pdf">Report and methodology</a>.</p>
+            </section>
+            <p class="transition-note">City air quality describes local pollution exposure over a particular year. The SSP chart below describes global climate trajectories over decades; neither chart can be converted into the other, and the global lines are not forecasts for these cities.</p>
             <section class="controls">
-                <h3>Emissions Scenarios</h3>
+                <h2>Global temperature: three emissions scenarios</h2>
+                <p>Compare the trajectories, then inspect a year. The vertical scale stays fixed when you hide scenarios.</p>
                 <div class="scenario-buttons">
-                    <button class="scenario-button active" data-scenario="SSP1-2.6">
-                        Low Emissions
+                    <button class="scenario-button active" data-scenario="SSP1-2.6" aria-pressed="true" aria-controls="chart" style="--scenario-color: #32966f; --line-style: solid">
+                        Low Emissions <small>(SSP1-2.6)</small>
                     </button>
                     
-                    <button class="scenario-button active" data-scenario="SSP2-4.5">
-                        Moderate Emissions
+                    <button class="scenario-button active" data-scenario="SSP2-4.5" aria-pressed="true" aria-controls="chart" style="--scenario-color: #e0a633; --line-style: dashed">
+                        Moderate Emissions <small>(SSP2-4.5)</small>
                     </button>
                     
-                    <button class="scenario-button active" data-scenario="SSP5-8.5">
-                        High Emissions
+                    <button class="scenario-button active" data-scenario="SSP5-8.5" aria-pressed="true" aria-controls="chart" style="--scenario-color: #de4321; --line-style: dotted">
+                        High Emissions <small>(SSP5-8.5)</small>
                     </button>
                 </div>
                 
+                <p id="chart-status" role="status">Loading temperature data…</p>
                 <div id="chart"></div>
+                <div class="year-inspection">
+                    <label for="inspect-year">Inspect year: <output id="selected-year" for="inspect-year">2100</output></label>
+                    <input id="inspect-year" type="range" min="2015" max="2100" step="1" value="2100" disabled aria-describedby="inspection-help">
+                    <p id="inspection-help">Hover or tap the chart, or use this slider with touch or the arrow keys, to compare yearly values.</p>
+                    <ul id="year-values" aria-live="polite" aria-atomic="true"></ul>
+                </div>
+                <p id="takeaway"></p>
+            </section>
+            <section aria-labelledby="data-heading">
+                <h2 id="data-heading">About the data</h2>
+                <p>This prototype reads <a href="all_scenarios.csv">all_scenarios.csv</a>, which contains 258 annual records: 86 years per scenario, from 2015 through 2100. The chart uses the file’s <code>global_temp_c</code> values as supplied.</p>
+                <p><strong>Source verification pending:</strong> The original provider, climate model or ensemble, processing method, and temperature baseline are not documented in the current repository. These details must be verified before interpreting the values as absolute temperatures or warming relative to a historical baseline. The three lines show the supplied trajectories; uncertainty ranges are not available in this CSV.</p>
+            </section>
+            <section aria-labelledby="prototype-heading">
+                <h2 id="prototype-heading">Initial prototype write-up</h2>
+                <h3 id="progress-heading">What have we done so far?</h3>
+                <p>We have built an interactive prototype comparing local air quality with separate global temperature trajectories. A D3 bar chart shows IQAir’s reported 2023 annual PM2.5 averages for Shanghai, Los Angeles, and Reykjavík, with units, source links, and monitoring caveats. Selecting a city highlights its bar and updates its reported value while keeping all three cities visible. The existing D3 line chart uses 258 global scenario records from 2015 through 2100 and retains scenario toggles and year inspection. Users can hover or tap the global chart, or use the keyboard-accessible year slider, to compare yearly values on a fixed vertical scale. We have also added readable selection states and messages for empty selections or unavailable data.</p>
+            </section>
+            <section aria-labelledby="challenges-heading">
+                <h3 id="challenges-heading">What will be most challenging to design, and why?</h3>
+                <p>The most challenging design problem is comparing city-level pollution and global climate outcomes without suggesting that they measure the same thing. The city chart uses annual PM2.5 concentrations, while the global chart uses temperature values across different future scenarios. We need concise explanations that preserve this distinction and make the two interactions easy to understand. Monitoring coverage differs across cities, and a citywide annual average can hide daily peaks and neighborhood differences. We still need to verify the original global dataset’s provider, model, processing method, and temperature baseline before making stronger climate claims. Our next step is to refine the guided explanation using feedback on the comparisons and the amount of context viewers need.</p>
+            </section>
+            <section aria-labelledby="conclusion-heading">
+                <h2 id="conclusion-heading">Two different environmental questions</h2>
+                <p>In this three-city sample, Shanghai’s reported 2023 annual PM2.5 concentration is highest and Reykjavík’s is lowest. That comparison describes local particle pollution in one year; it does not rank the cities’ greenhouse-gas emissions or tell us how quickly they will warm. Reading it alongside global scenarios helps separate the air people breathe locally from longer-term global climate outcomes.</p>
             </section>
         </main>
     </body>

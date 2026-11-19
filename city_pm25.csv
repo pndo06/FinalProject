@@ -1,0 +1,4 @@
+city,country,year,pm25_ug_m3,source_url
+Shanghai,China,2023,28.7,https://www.iqair.com/world-most-polluted-cities?cities=R6kPWmwE4Nts3vq3k
+Los Angeles,USA,2023,9.5,https://www.iqair.com/world-most-polluted-cities?cities=xwJyTC4tyag4svdTe
+Reykjavík,Iceland,2023,3.9,https://www.iqair.com/world-most-polluted-cities?page=183

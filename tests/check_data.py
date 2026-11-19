@@ -47,3 +47,25 @@ for heading in ['progress-heading', 'challenges-heading']:
     paragraph = re.search(r'id="' + heading + r'"[^>]*>.*?</h3>\s*<p>(.*?)</p>', html, re.S).group(1)
     assert len(re.findall(r'[.!?](?:\s|$)', paragraph)) >= 4
 print('PASS: honest location options and both four-sentence prototype answers.')
+
+
+# All city/scenario/year combinations must be genuine local-grid records.
+import json
+with (root / 'city_temperatures.csv').open() as source:
+    temperatures = list(csv.DictReader(source))
+assert len(temperatures) == 774
+keys = {(r['location'], r['scenario'], int(r['year'])) for r in temperatures}
+assert len(keys) == 774
+for city in expected:
+    for scenario in ['SSP1-2.6', 'SSP2-4.5', 'SSP5-8.5']:
+        assert {year for location, ssp, year in keys if location == city and ssp == scenario} == set(range(2015, 2101))
+manifest = json.loads((root / 'city_temperature_sources.json').read_text())
+assert manifest['units'] == 'degC'
+for r in temperatures:
+    assert -60 < float(r['temperature_c']) < 60
+    coord = manifest['scenarios'][r['scenario']]['locations'][r['location']]
+    assert float(r['grid_latitude']) == coord['grid_latitude']
+    assert float(r['grid_longitude']) == coord['grid_longitude']
+for city, value in [('Shanghai', '22.23'), ('Los Angeles', '23.58'), ('Reykjavík', '7.90')]:
+    assert next(r['temperature_c'] for r in temperatures if r['location'] == city and r['year'] == '2100' and r['scenario'] == 'SSP5-8.5') == value
+print('PASS: complete sourced city climate series and extraction metadata.')

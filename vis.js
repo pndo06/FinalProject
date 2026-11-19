@@ -16,6 +16,9 @@ const names = {
 let data = [];
 let active = new Set(Object.keys(names));
 let selectedYear = 2100;
+let selectedLocation = 'global';
+const locationNames = { global: 'Global Average', shanghai: 'Shanghai', 'los-angeles': 'Los Angeles', reykjavik: 'Reykjavík' };
+const dataByLocation = {};
 
 const margin = { top: 25, right: 30, bottom: 60, left: 75 };
 let width = 1050 - margin.left - margin.right;
@@ -64,7 +67,7 @@ const grid = chart.append("g").attr("class", "grid");
 // Lines
 const line = d3.line()
   .x(d => x(d.year))
-  .y(d => y(d.global_temp_c));
+  .y(d => y(d.temperature_c));
 
 const lines = chart.append("g");
 
@@ -135,11 +138,11 @@ function inspectYear(year, showTooltip = false) {
   const points = data.filter(d => active.has(d.scenario) && d.year === year);
   d3.select('#year-values').selectAll('li').data(points, d => d.scenario).join('li')
     .style('--scenario-color', d => colors[d.scenario])
-    .text(d => `${names[d.scenario]} (${d.scenario}): ${d.global_temp_c.toFixed(2)} °C`);
+    .text(d => `${names[d.scenario]} (${d.scenario}): ${d.temperature_c.toFixed(2)} °C`);
   hoverLine.style('display', points.length ? null : 'none')
     .attr('x1', x(year)).attr('x2', x(year)).attr('y1', 0).attr('y2', height);
   infoBox.style('display', showTooltip && points.length ? null : 'none');
-  infoText.selectAll('tspan').data([`Year: ${year}`, ...points.map(d => `${names[d.scenario]}: ${d.global_temp_c.toFixed(2)} °C`)])
+  infoText.selectAll('tspan').data([`${locationNames[selectedLocation]} · ${year}`, ...points.map(d => `${names[d.scenario]}: ${d.temperature_c.toFixed(2)} °C`)])
     .join('tspan').attr('x', 12).attr('dy', (d, i) => i === 0 ? 0 : 20).text(d => d);
   infoBox.select('rect').attr('height', 35 + points.length * 20);
 }
@@ -171,6 +174,7 @@ d3.selectAll(".scenario-button").on("click", function() {
 });
 
 function resizeChart() {
+  if (!data.length) return;
   const outerWidth = document.querySelector('#chart').clientWidth || 1050;
   const outerHeight = outerWidth < 600 ? 340 : 560;
   width = Math.max(180, outerWidth - margin.left - margin.right);
@@ -185,34 +189,78 @@ function resizeChart() {
   updateChart();
 }
 
-// Reject malformed data rather than silently dropping scenario values.
-try {
-  data = await d3.csv('all_scenarios.csv', d => ({
-    year: d.year?.trim() ? +d.year : NaN,
-    global_temp_c: d.global_temp_c?.trim() ? +d.global_temp_c : NaN,
-    scenario: d.scenario?.trim(),
-  }));
-  if (!data.length || data.some(d => !Number.isInteger(d.year) || !Number.isFinite(d.global_temp_c) || !Object.hasOwn(names, d.scenario)) ||
-      new Set(data.map(d => `${d.scenario}:${d.year}`)).size !== data.length ||
-      Object.keys(names).some(scenario => !data.some(d => d.scenario === scenario))) {
-    throw new Error('Invalid scenario data');
-  }
+function setLocation(location) {
+  if (!dataByLocation[location]) return;
+  selectedLocation = location;
+  data = dataByLocation[location];
   const years = d3.extent(data, d => d.year);
-  if (years[0] === years[1]) throw new Error('A multi-year dataset is required');
   x.domain(years);
-  const [minTemp, maxTemp] = d3.extent(data, d => d.global_temp_c);
+  const [minTemp, maxTemp] = d3.extent(data, d => d.temperature_c);
   const padding = Math.max((maxTemp - minTemp) * 0.12, 0.1);
   y.domain([minTemp - padding, maxTemp + padding]).nice();
-  selectedYear = years[1];
+  selectedYear = Math.max(years[0], Math.min(years[1], selectedYear));
   d3.select('#inspect-year').attr('min', years[0]).attr('max', years[1]).property('disabled', false);
+  d3.selectAll('.scenario-button').property('disabled', false);
+  d3.select('#chart-status').attr('role', 'status');
+  d3.select('#temperature-heading').text(`${locationNames[location]}: three emissions scenarios`);
+  chart.select('.y-label').text('Temperature (°C)');
+  svg.attr('aria-label', `${locationNames[location]} annual temperature projections. Use the scenario buttons and year slider for detailed values.`);
+  const source = d3.select('#temperature-source');
+  if (location === 'global') {
+    source.text('Global Average · original project dataset.');
+  } else {
+    source.text(`World Bank CCKP · annual mean temperature · multi-model median · 0.25° grid near ${locationNames[location]} (${data[0].grid_latitude}°, ${data[0].grid_longitude}°), not a neighborhood forecast. `);
+    source.append('a').attr('href', 'https://worldbank.github.io/climateknowledgeportal/README.html').text('Source');
+  }
   resizeChart();
-  new ResizeObserver(resizeChart).observe(document.querySelector('#chart'));
+}
+
+d3.select('#temperature-location').on('change', event => setLocation(event.target.value));
+
+// Reject malformed data rather than silently dropping scenario values.
+try {
+  const globalData = await d3.csv('all_scenarios.csv', d => ({
+    year: d.year?.trim() ? +d.year : NaN,
+    temperature_c: d.global_temp_c?.trim() ? +d.global_temp_c : NaN,
+    scenario: d.scenario?.trim(),
+  }));
+  if (!globalData.length || globalData.some(d => !Number.isInteger(d.year) || !Number.isFinite(d.temperature_c) || !Object.hasOwn(names, d.scenario)) ||
+      new Set(globalData.map(d => `${d.scenario}:${d.year}`)).size !== globalData.length ||
+      Object.keys(names).some(scenario => !globalData.some(d => d.scenario === scenario)) ||
+      d3.min(globalData, d => d.year) === d3.max(globalData, d => d.year)) {
+    throw new Error('Invalid scenario data');
+  }
+  dataByLocation.global = globalData;
+  setLocation('global');
 } catch {
-  data = [];
-  lines.selectAll('path').remove();
-  hoverLine.style('display', 'none');
-  infoBox.style('display', 'none');
-  d3.select('#chart-status').attr('role', 'alert').text('Temperature data could not be loaded or validated. Please reload the page; if this persists, check all_scenarios.csv.');
+  d3.select('#chart-status').attr('role', 'alert').text('Global temperature data could not be loaded or validated. Please reload the page.');
   d3.select('#inspect-year').property('disabled', true);
   d3.selectAll('.scenario-button').property('disabled', true);
+  d3.select('#temperature-location option[value="global"]').property('disabled', true);
 }
+
+try {
+  const cityData = await d3.csv('city_temperatures.csv', d => ({
+    ...d,
+    year: +d.year,
+    temperature_c: d.temperature_c?.trim() ? +d.temperature_c : NaN,
+    grid_latitude: +d.grid_latitude,
+    grid_longitude: +d.grid_longitude,
+  }));
+  const cityNames = Object.values(locationNames).slice(1);
+  if (cityData.length !== 774 || cityData.some(d => !cityNames.includes(d.location) || !Object.hasOwn(names, d.scenario) ||
+      !Number.isInteger(d.year) || d.year < 2015 || d.year > 2100 || !Number.isFinite(d.temperature_c) ||
+      Math.abs(d.temperature_c) > 100 || !Number.isFinite(d.grid_latitude) || !Number.isFinite(d.grid_longitude)) ||
+      new Set(cityData.map(d => `${d.location}:${d.scenario}:${d.year}`)).size !== 774) {
+    throw new Error('Incomplete city projections');
+  }
+  for (const [key, name] of Object.entries(locationNames).slice(1)) {
+    dataByLocation[key] = cityData.filter(d => d.location === name);
+    d3.select(`#temperature-location option[value="${key}"]`).property('disabled', false).text(name);
+  }
+} catch {
+  for (const [key, name] of Object.entries(locationNames).slice(1)) {
+    d3.select(`#temperature-location option[value="${key}"]`).property('disabled', true).text(`${name} — temperature data unavailable`);
+  }
+}
+new ResizeObserver(resizeChart).observe(document.querySelector('#chart'));

@@ -6,18 +6,18 @@
         <title>Final Project Interactive Visualization</title>
         
         <link rel="stylesheet" href="style.css?v=cities1">
-        <script type="module" src="vis.js?v=copy3"></script>
+        <script type="module" src="vis.js?v=temperature1"></script>
         <script type="module" src="cities.js?v=copy2"></script>
     </head>
     
     <body>
         <header>
             <h1>How Hot Could Earth Get by 2100?</h1>
-            <p>Local air quality in three cities, alongside global temperature scenarios</p>
+            <p>Local air quality in three cities, alongside city and global temperature scenarios</p>
         </header>
         
         <main>
-            <p class="introduction">How do air-quality conditions in Shanghai, Los Angeles, and Reykjavík compare—and how is that different from global warming? Start with a measured local pollutant, then explore the separate global temperature trajectories below.</p>
+            <p class="introduction">How do air-quality conditions in Shanghai, Los Angeles, and Reykjavík compare—and how is that different from global warming? Start with a measured local pollutant, then explore the separate temperature trajectories below.</p>
             <section aria-labelledby="cities-heading">
                 <h2 id="cities-heading">Three cities: annual PM2.5 in 2023</h2>
                 <label for="city-select">Highlight a city:</label>
@@ -31,7 +31,7 @@
                 <p id="city-detail" aria-live="polite"></p>
             </section>
             <section class="controls">
-                <h2>Global temperature: three emissions scenarios</h2>
+                <h2 id="temperature-heading">Global Average: three emissions scenarios</h2>
                 <p>Compare the trajectories, then inspect a year. The vertical scale stays fixed when you hide scenarios.</p>
                 <div class="scenario-buttons">
                     <button class="scenario-button active" data-scenario="SSP1-2.6" aria-pressed="true" aria-controls="chart" style="--scenario-color: #32966f; --line-style: solid">
@@ -48,12 +48,13 @@
                 </div>
                 
                 <label for="temperature-location">Temperature location:</label>
-                <select id="temperature-location">
+                <select id="temperature-location" aria-describedby="temperature-source">
                     <option value="global" selected>Global Average</option>
-                    <option value="shanghai" disabled>Shanghai — temperature data unavailable</option>
-                    <option value="los-angeles" disabled>Los Angeles — temperature data unavailable</option>
-                    <option value="reykjavik" disabled>Reykjavík — temperature data unavailable</option>
+                    <option value="shanghai" disabled>Shanghai — loading temperature data</option>
+                    <option value="los-angeles" disabled>Los Angeles — loading temperature data</option>
+                    <option value="reykjavik" disabled>Reykjavík — loading temperature data</option>
                 </select>
+                <p id="temperature-source" class="source-note" aria-live="polite"></p>
                 <p id="chart-status" role="status">Loading temperature data…</p>
                 <div id="chart"></div>
                 <div class="year-inspection">
@@ -66,11 +67,11 @@
             <section aria-labelledby="prototype-heading">
                 <h2 id="prototype-heading">Initial prototype write-up</h2>
                 <h3 id="progress-heading">What have we done so far?</h3>
-                <p>We have built an interactive prototype comparing local air quality with separate global temperature trajectories. A D3 bar chart shows IQAir’s reported 2023 annual PM2.5 averages for Shanghai, Los Angeles, and Reykjavík, using the same year and units for all three cities. Selecting a city highlights its bar and updates its reported value while keeping all three cities visible. The existing D3 line chart uses 258 global scenario records from 2015 through 2100 and retains scenario toggles and year inspection. Users can hover or tap the global chart, or use the keyboard-accessible year slider, to compare yearly values on a fixed vertical scale. The temperature location selector shows Global Average, with city options disabled until comparable city-level SSP data is verified. We have also added readable selection states and messages for empty selections or unavailable data.</p>
+                <p>We have built an interactive prototype comparing local air quality with separate temperature projections. A D3 bar chart shows IQAir’s reported 2023 annual PM2.5 averages for Shanghai, Los Angeles, and Reykjavík, using the same year and units for all three cities. Selecting a city highlights its bar and updates its reported value while keeping all three cities visible. The D3 line chart keeps the original global series and adds 774 World Bank climate-grid records near the three cities, covering 2015 through 2100 under the same three scenarios. Users can hover or tap the temperature chart, or use the keyboard-accessible year slider, to compare yearly values while the scenario scale stays fixed for the selected location. The temperature location selector updates the lines, location label, tooltips, and yearly values for Global Average, Shanghai, Los Angeles, or Reykjavík. We have also added readable selection states and messages for empty selections or unavailable data.</p>
             </section>
             <section aria-labelledby="challenges-heading">
                 <h3 id="challenges-heading">What will be most challenging to design, and why?</h3>
-                <p>The most challenging design problem is comparing city-level pollution and global climate outcomes without suggesting that they measure the same thing. The city chart uses annual PM2.5 concentrations, while the global chart uses temperature values across different future scenarios. We need concise explanations that preserve this distinction and make the two interactions easy to understand. Monitoring coverage differs across cities, and a citywide annual average can hide daily peaks and neighborhood differences. We still need to verify the original global dataset’s provider, model, processing method, and temperature baseline before making stronger climate claims. Our next step is to refine the guided explanation using feedback on the comparisons and the amount of context viewers need.</p>
+                <p>The most challenging design problem is comparing city-level pollution and global climate outcomes without suggesting that they measure the same thing. The bar chart uses annual PM2.5 concentrations, while the line chart uses temperature values across different future scenarios. We need concise explanations that preserve this distinction and make the two interactions easy to understand. Monitoring coverage differs across cities, and a citywide annual average can hide daily peaks and neighborhood differences. The city temperature series represent nearby 0.25-degree climate-grid cells rather than neighborhood forecasts, and the original global dataset still needs its source verified. Our next step is to refine the guided explanation using feedback on the comparisons and the amount of context viewers need.</p>
             </section>
             <section aria-labelledby="conclusion-heading">
                 <h2 id="conclusion-heading">Two different environmental questions</h2>

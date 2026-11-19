@@ -1,0 +1,192 @@
+{
+  "provider": "World Bank Climate Change Knowledge Portal",
+  "collection": "cmip6-x0.25",
+  "product": "timeseries-tas-annual-mean",
+  "ensemble_statistic": "median",
+  "retrieved": "2026-11-19",
+  "units": "degC",
+  "extraction": "Nearest coordinate-grid cell, no interpolation, un-smoothed annual series",
+  "scenarios": {
+    "SSP1-2.6": {
+      "url": "https://wbg-cckp.s3.amazonaws.com/data/cmip6-x0.25/tas/ensemble-all-ssp126/timeseries-tas-annual-mean_cmip6-x0.25_ensemble-all-ssp126_timeseries_median_2015-2100.nc",
+      "units": "degC",
+      "models": [
+        "access-cm2",
+        "access-esm1-5",
+        "bcc-csm2-mr",
+        "canesm5",
+        "cmcc-esm2",
+        "cnrm-cm6-1",
+        "cnrm-esm2-1",
+        "ec-earth3",
+        "ec-earth3-veg-lr",
+        "fgoals-g3",
+        "gfdl-esm4",
+        "giss-e2-1-g",
+        "hadgem3-gc31-ll",
+        "hadgem3-gc31-mm",
+        "inm-cm4-8",
+        "inm-cm5-0",
+        "ipsl-cm6a-lr",
+        "kace-1-0-g",
+        "kiost-esm",
+        "miroc6",
+        "miroc-es2l",
+        "mpi-esm1-2-hr",
+        "mpi-esm1-2-lr",
+        "mri-esm2-0",
+        "nesm3",
+        "noresm2-lm",
+        "noresm2-mm",
+        "ukesm1-0-ll"
+      ],
+      "locations": {
+        "Shanghai": {
+          "requested_latitude": 31.2304,
+          "requested_longitude": 121.4737,
+          "grid_latitude": 31.25,
+          "grid_longitude": 121.5,
+          "i": 485,
+          "j": 1206
+        },
+        "Los Angeles": {
+          "requested_latitude": 34.0522,
+          "requested_longitude": -118.2437,
+          "grid_latitude": 34.0,
+          "grid_longitude": -118.25,
+          "i": 496,
+          "j": 247
+        },
+        "Reykjavík": {
+          "requested_latitude": 64.1466,
+          "requested_longitude": -21.9426,
+          "grid_latitude": 64.25,
+          "grid_longitude": -22.0,
+          "i": 617,
+          "j": 632
+        }
+      }
+    },
+    "SSP2-4.5": {
+      "url": "https://wbg-cckp.s3.amazonaws.com/data/cmip6-x0.25/tas/ensemble-all-ssp245/timeseries-tas-annual-mean_cmip6-x0.25_ensemble-all-ssp245_timeseries_median_2015-2100.nc",
+      "units": "degC",
+      "models": [
+        "access-cm2",
+        "access-esm1-5",
+        "bcc-csm2-mr",
+        "canesm5",
+        "cmcc-esm2",
+        "cnrm-cm6-1",
+        "cnrm-esm2-1",
+        "ec-earth3",
+        "ec-earth3-veg-lr",
+        "fgoals-g3",
+        "gfdl-cm4",
+        "gfdl-esm4",
+        "giss-e2-1-g",
+        "hadgem3-gc31-ll",
+        "inm-cm4-8",
+        "inm-cm5-0",
+        "ipsl-cm6a-lr",
+        "kace-1-0-g",
+        "kiost-esm",
+        "miroc6",
+        "miroc-es2l",
+        "mpi-esm1-2-hr",
+        "mpi-esm1-2-lr",
+        "mri-esm2-0",
+        "nesm3",
+        "noresm2-lm",
+        "noresm2-mm",
+        "ukesm1-0-ll"
+      ],
+      "locations": {
+        "Shanghai": {
+          "requested_latitude": 31.2304,
+          "requested_longitude": 121.4737,
+          "grid_latitude": 31.25,
+          "grid_longitude": 121.5,
+          "i": 485,
+          "j": 1206
+        },
+        "Los Angeles": {
+          "requested_latitude": 34.0522,
+          "requested_longitude": -118.2437,
+          "grid_latitude": 34.0,
+          "grid_longitude": -118.25,
+          "i": 496,
+          "j": 247
+        },
+        "Reykjavík": {
+          "requested_latitude": 64.1466,
+          "requested_longitude": -21.9426,
+          "grid_latitude": 64.25,
+          "grid_longitude": -22.0,
+          "i": 617,
+          "j": 632
+        }
+      }
+    },
+    "SSP5-8.5": {
+      "url": "https://wbg-cckp.s3.amazonaws.com/data/cmip6-x0.25/tas/ensemble-all-ssp585/timeseries-tas-annual-mean_cmip6-x0.25_ensemble-all-ssp585_timeseries_median_2015-2100.nc",
+      "units": "degC",
+      "models": [
+        "access-cm2",
+        "access-esm1-5",
+        "bcc-csm2-mr",
+        "canesm5",
+        "cmcc-esm2",
+        "cnrm-cm6-1",
+        "cnrm-esm2-1",
+        "ec-earth3",
+        "ec-earth3-veg-lr",
+        "fgoals-g3",
+        "gfdl-cm4",
+        "gfdl-esm4",
+        "giss-e2-1-g",
+        "hadgem3-gc31-ll",
+        "hadgem3-gc31-mm",
+        "inm-cm4-8",
+        "inm-cm5-0",
+        "ipsl-cm6a-lr",
+        "kace-1-0-g",
+        "kiost-esm",
+        "miroc6",
+        "miroc-es2l",
+        "mpi-esm1-2-hr",
+        "mpi-esm1-2-lr",
+        "mri-esm2-0",
+        "nesm3",
+        "noresm2-lm",
+        "noresm2-mm",
+        "ukesm1-0-ll"
+      ],
+      "locations": {
+        "Shanghai": {
+          "requested_latitude": 31.2304,
+          "requested_longitude": 121.4737,
+          "grid_latitude": 31.25,
+          "grid_longitude": 121.5,
+          "i": 485,
+          "j": 1206
+        },
+        "Los Angeles": {
+          "requested_latitude": 34.0522,
+          "requested_longitude": -118.2437,
+          "grid_latitude": 34.0,
+          "grid_longitude": -118.25,
+          "i": 496,
+          "j": 247
+        },
+        "Reykjavík": {
+          "requested_latitude": 64.1466,
+          "requested_longitude": -21.9426,
+          "grid_latitude": 64.25,
+          "grid_longitude": -22.0,
+          "i": 617,
+          "j": 632
+        }
+      }
+    }
+  }
+}
